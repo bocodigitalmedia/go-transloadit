@@ -13,7 +13,7 @@ func (s *Service) Read(id string) (*Template, *http.Response, error) {
 	resp, err := s.Api.Get(path, params, result)
 
 	if errResp, ok := err.(*transloadit_api.ErrorResponse); ok && errResp.Code == "SERVER_404" {
-		return nil, nil, &NotFound{id}
+		return nil, nil, &TemplateNotFound{id}
 	} else {
 		return result, resp, err
 	}

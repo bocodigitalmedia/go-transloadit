@@ -8,7 +8,7 @@ type ErrorResponse struct {
 	Reason  string `json:"reason,omitempty"`
 }
 
-func (e *ErrorResponse) Error() string {
+func (e ErrorResponse) Error() string {
 	parts := []string{}
 
 	if e.Code != "" {
