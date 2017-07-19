@@ -6,14 +6,11 @@ import (
 	"github.com/bocodigitalmedia/go-transloadit/transloadit_api"
 )
 
-func (s *Service) Read(id string, payload *ReadPayload) (*ReadResult, *http.Response, error) {
-	if payload == nil {
-		payload = new(ReadPayload)
-	}
-
+func (s *Service) Read(id string) (*Template, *http.Response, error) {
+	params := new(ReadParams)
 	path := s.Path(id)
-	result := new(ReadResult)
-	resp, err := s.Api.Get(path, payload, result)
+	result := new(Template)
+	resp, err := s.Api.Get(path, params, result)
 
 	if errResp, ok := err.(*transloadit_api.ErrorResponse); ok && errResp.Code == "SERVER_404" {
 		return nil, nil, &NotFound{id}
@@ -22,17 +19,10 @@ func (s *Service) Read(id string, payload *ReadPayload) (*ReadResult, *http.Resp
 	}
 }
 
-type ReadPayload struct {
+type ReadParams struct {
 	Auth *transloadit_api.Auth `json:"auth"`
 }
 
-func (p *ReadPayload) SetAuth(auth *transloadit_api.Auth) {
+func (p *ReadParams) SetAuth(auth *transloadit_api.Auth) {
 	p.Auth = auth
-}
-
-type ReadResult struct {
-	Ok      string      `json:"ok"`
-	Id      string      `json:"id"`
-	Name    string      `json:"name"`
-	Content interface{} `json:"content"`
 }

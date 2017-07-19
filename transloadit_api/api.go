@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -59,6 +60,10 @@ func (a *Api) Payload(params interface{}) (*Payload, error) {
 			Signature: signature,
 		}
 
+		log.Printf("PARAMS: %s", string(bytes))
+
+		jsb, _ := json.Marshal(payload)
+		log.Printf("PAYLOAD: %s", string(jsb))
 		return payload, nil
 	}
 }
@@ -67,6 +72,7 @@ func (a *Api) Post(path string, params AuthorizableParams, result interface{}) (
 	if payload, err := a.Payload(params); err != nil {
 		return nil, err
 	} else {
+		log.Printf("PAYLOAD: %v", payload)
 		decorate := func(s *sling.Sling) *sling.Sling {
 			return s.Post(path).BodyJSON(payload)
 		}
