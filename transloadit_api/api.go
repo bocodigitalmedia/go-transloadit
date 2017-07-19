@@ -98,6 +98,8 @@ func (a *Api) Put(path string, params AuthorizableParams, result interface{}) (*
 	if payload, err := a.Payload(params); err != nil {
 		return nil, err
 	} else {
+		log.Printf("PAYLOAD: %v", payload)
+
 		decorate := func(s *sling.Sling) *sling.Sling {
 			return s.Put(path).BodyJSON(payload)
 		}

@@ -1,9 +1,9 @@
 package transloadit_template_service
 
 type Template struct {
-	Id      string           `json:"id,omitempty"`
-	Name    string           `json:"name,omitempty"`
-	Content *TemplateContent `json:"content,omitempty"`
+	Id      string      `json:"id,omitempty"`
+	Name    string      `json:"name,omitempty"`
+	Content interface{} `json:"content,omitempty"`
 }
 
 type TemplateContent struct {

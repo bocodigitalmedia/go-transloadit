@@ -17,7 +17,7 @@ func (s *Service) Create(params *CreateParams) (*Template, *http.Response, error
 type CreateParams struct {
 	Auth    *transloadit_api.Auth `json:"auth"`
 	Name    string                `json:"name"`
-	Content *TemplateContent      `json:"template"`
+	Content string                `json:"template"`
 }
 
 func (p *CreateParams) SetAuth(auth *transloadit_api.Auth) {
