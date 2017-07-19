@@ -1,27 +1,25 @@
 package transloadit_template_service
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/bocodigitalmedia/go-transloadit/transloadit_api"
 )
 
-func (s *Service) Update(id string, params *UpdateParams) (*Template, *http.Response, error) {
-	if exists, err := s.Exists(id); err != nil {
-		return nil, nil, err
-	} else if !exists {
-		return nil, nil, &TemplateNotFound{id}
-	}
-	log.Printf("EXISTS")
+func (s *Service) Update(id string, params *UpdateParams) (*UpdateResult, *http.Response, error) {
 	path := s.Path(id)
-	result := new(Template)
+	result := new(UpdateResult)
+	resp, err := s.Api.Put(path, params, result)
 
-	if resp, err := s.Api.Put(path, params, result); err != nil {
-		return nil, resp, err
+	if errResp, ok := err.(*transloadit_api.ErrorResponse); ok && errResp.Code == "SERVER_404" {
+		return nil, nil, &TemplateNotFound{id}
 	} else {
-		return s.Read(id)
+		return result, resp, err
 	}
+}
+
+type UpdateResult struct {
+	Ok string `json:"ok"`
 }
 
 type UpdateParams struct {
