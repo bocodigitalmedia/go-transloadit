@@ -3,8 +3,9 @@ package transloadit_api
 import "strings"
 
 type ErrorResponse struct {
-	Code    string `json:"error"`
-	Message string `json:"message"`
+	Code    string `json:"error,omitempty"`
+	Message string `json:"message,omitempty"`
+	Reason  string `json:"reason,omitempty"`
 }
 
 func (e *ErrorResponse) Error() string {
@@ -18,9 +19,13 @@ func (e *ErrorResponse) Error() string {
 		parts = append(parts, e.Message)
 	}
 
+	if e.Reason != "" {
+		parts = append(parts, e.Reason)
+	}
+
 	return strings.Join(parts, ": ")
 }
 
 func (e *ErrorResponse) IsEmpty() bool {
-	return e.Code == "" && e.Message == ""
+	return e.Code == ""
 }

@@ -5,7 +5,6 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"
-	"log"
 	"net/http"
 	"time"
 
@@ -28,7 +27,6 @@ func (a *Api) Auth() *Auth {
 }
 
 func (a *Api) Signature(b []byte) string {
-	log.Printf("SECRET: %s", a.authSecret)
 	hash := hmac.New(sha1.New, []byte(a.authSecret))
 	hash.Write(b)
 	sum := hash.Sum(nil)
@@ -37,12 +35,12 @@ func (a *Api) Signature(b []byte) string {
 }
 
 func (a *Api) Receive(decorate SlingDecorator, result *interface{}) (*http.Response, error) {
-	errorResponse := new(ErrorResponse)
+	errResp := new(ErrorResponse)
 	base := decorate(a.Base())
-	resp, err := base.Receive(result, errorResponse)
+	resp, err := base.Receive(result, errResp)
 
-	if err == nil && !errorResponse.IsEmpty() {
-		err = errorResponse
+	if err == nil && !errResp.IsEmpty() {
+		err = errResp
 	}
 
 	return resp, err
