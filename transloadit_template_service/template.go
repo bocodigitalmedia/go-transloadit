@@ -24,9 +24,10 @@ func (u *Template) UnmarshalJSON(data []byte) error {
 	if bytes, err := json.MarshalIndent(aux.Content, "", "  "); err != nil {
 		return err
 	} else {
+		json := string(bytes) + "\n"
 		u.Id = aux.Id
 		u.Name = aux.Name
-		u.Content = string(bytes)
+		u.Content = json
 		return nil
 	}
 }
