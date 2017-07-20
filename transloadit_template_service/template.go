@@ -21,7 +21,7 @@ func (u *Template) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if bytes, err := json.Marshal(aux.Content); err != nil {
+	if bytes, err := json.MarshalIndent(aux.Content, "", "  "); err != nil {
 		return err
 	} else {
 		u.Id = aux.Id
